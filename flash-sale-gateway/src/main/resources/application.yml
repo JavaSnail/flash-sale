@@ -1,0 +1,43 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: flash-sale-gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${NACOS_ADDR:127.0.0.1:8848}
+    gateway:
+      routes:
+        - id: user-service
+          uri: lb://flash-sale-user
+          predicates:
+            - Path=/user/**
+        - id: goods-service
+          uri: lb://flash-sale-goods
+          predicates:
+            - Path=/goods/**
+        - id: seckill-service
+          uri: lb://flash-sale-seckill
+          predicates:
+            - Path=/seckill/**
+        - id: order-service
+          uri: lb://flash-sale-order
+          predicates:
+            - Path=/order/**
+        - id: pay-service
+          uri: lb://flash-sale-pay
+          predicates:
+            - Path=/pay/**
+        - id: admin-service
+          uri: lb://flash-sale-admin
+          predicates:
+            - Path=/admin/**
+    sentinel:
+      transport:
+        dashboard: ${SENTINEL_DASHBOARD:127.0.0.1:8080}
+  data:
+    redis:
+      host: ${REDIS_HOST:127.0.0.1}
+      port: ${REDIS_PORT:6379}
