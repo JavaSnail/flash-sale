@@ -1,15 +1,17 @@
 package com.flashsale.goods.infrastructure;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Repository;
+
 import com.flashsale.goods.domain.Goods;
 import com.flashsale.goods.domain.GoodsRepository;
 import com.flashsale.goods.domain.Money;
 import com.flashsale.goods.infrastructure.mapper.GoodsMapper;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 
 /**
  * 商品仓储 MyBatis 实现。
@@ -27,9 +29,7 @@ public class MyBatisGoodsRepository implements GoodsRepository {
 
     @Override
     public List<Goods> findAll() {
-        return goodsMapper.selectList(null).stream()
-                .map(this::toDomain)
-                .collect(Collectors.toList());
+        return goodsMapper.selectList(null).stream().map(this::toDomain).collect(Collectors.toList());
     }
 
     @Override
@@ -38,7 +38,8 @@ public class MyBatisGoodsRepository implements GoodsRepository {
         if (goods.getId() == null) {
             goodsMapper.insert(goodsDO);
             return goods.withId(goodsDO.getId());
-        } else {
+        }
+        else {
             goodsMapper.updateById(goodsDO);
             return goods;
         }
@@ -47,15 +48,8 @@ public class MyBatisGoodsRepository implements GoodsRepository {
     // ==================== DO ↔ Domain 转换 ====================
 
     private Goods toDomain(GoodsDO d) {
-        return Goods.reconstitute(
-                d.getId(),
-                d.getGoodsName(),
-                d.getGoodsImg(),
-                Money.of(d.getGoodsPrice()),
-                d.getGoodsStock() == null ? 0 : d.getGoodsStock(),
-                d.getCreateTime(),
-                d.getUpdateTime()
-        );
+        return Goods.reconstitute(d.getId(), d.getGoodsName(), d.getGoodsImg(), Money.of(d.getGoodsPrice()),
+            d.getGoodsStock() == null ? 0 : d.getGoodsStock(), d.getCreateTime(), d.getUpdateTime());
     }
 
     private GoodsDO toDO(Goods g) {

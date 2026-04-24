@@ -4,9 +4,9 @@ import java.math.BigDecimal;
 
 /**
  * 值对象：金额。
- *
- * <p>不可变对象，创建时校验非负约束。
- * 封装价格/金额概念，消除 {@link BigDecimal} 裸用导致的隐式规则散落。</p>
+ * <p>
+ * 不可变对象，创建时校验非负约束。 封装价格/金额概念，消除 {@link BigDecimal} 裸用导致的隐式规则散落。
+ * </p>
  *
  * @param amount 金额数值，必须 >= 0
  * @throws IllegalArgumentException 当 amount 为 null 或负数时抛出

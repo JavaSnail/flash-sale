@@ -4,12 +4,12 @@ import java.time.LocalDateTime;
 
 /**
  * 值对象：时间区间（半开区间 [start, end)）。
- *
- * <p>与 goods 模块的 TimeRange 值对象功能相同，
- * 因 admin 模块不依赖 goods-service 而独立定义。</p>
+ * <p>
+ * 与 goods 模块的 TimeRange 值对象功能相同， 因 admin 模块不依赖 goods-service 而独立定义。
+ * </p>
  *
  * @param start 起始时间（含）
- * @param end   结束时间（不含）
+ * @param end 结束时间（不含）
  */
 public record TimeRange(LocalDateTime start, LocalDateTime end) {
 

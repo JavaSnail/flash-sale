@@ -4,15 +4,14 @@ import java.time.LocalDateTime;
 
 /**
  * 商品聚合根。
- *
- * <p>封装商品的核心属性与业务行为，所有状态变更通过业务方法完成。
- * 价格使用 {@link Money} 值对象封装，保证非负约束。</p>
- *
+ * <p>
+ * 封装商品的核心属性与业务行为，所有状态变更通过业务方法完成。 价格使用 {@link Money} 值对象封装，保证非负约束。
+ * </p>
  * <h3>业务行为</h3>
  * <ul>
- *   <li>{@link #changePrice(Money)} — 调整商品价格</li>
- *   <li>{@link #replenishStock(int)} — 补充库存</li>
- *   <li>{@link #isAvailable()} — 判断是否有货</li>
+ * <li>{@link #changePrice(Money)} — 调整商品价格</li>
+ * <li>{@link #replenishStock(int)} — 补充库存</li>
+ * <li>{@link #isAvailable()} — 判断是否有货</li>
  * </ul>
  *
  * @see Money
@@ -22,22 +21,23 @@ public class Goods {
     // ==================== 字段 ====================
 
     private final Long id;
+
     private String goodsName;
+
     private String goodsImg;
+
     private Money goodsPrice;
+
     private int goodsStock;
+
     private final LocalDateTime createTime;
+
     private LocalDateTime updateTime;
 
     // ==================== 私有构造器 ====================
 
-    private Goods(Long id,
-                  String goodsName,
-                  String goodsImg,
-                  Money goodsPrice,
-                  int goodsStock,
-                  LocalDateTime createTime,
-                  LocalDateTime updateTime) {
+    private Goods(Long id, String goodsName, String goodsImg, Money goodsPrice, int goodsStock,
+        LocalDateTime createTime, LocalDateTime updateTime) {
         this.id = id;
         this.goodsName = goodsName;
         this.goodsImg = goodsImg;
@@ -53,9 +53,9 @@ public class Goods {
      * 创建新商品。
      *
      * @param goodsName 商品名称，不能为空
-     * @param goodsImg  商品图片 URL
-     * @param price     价格值对象
-     * @param stock     初始库存，不能为负
+     * @param goodsImg 商品图片 URL
+     * @param price 价格值对象
+     * @param stock 初始库存，不能为负
      * @return 尚未持久化的商品（id = null）
      */
     public static Goods create(String goodsName, String goodsImg, Money price, int stock) {
@@ -71,16 +71,12 @@ public class Goods {
 
     /**
      * 从持久化存储重建领域对象。
-     *
-     * <p><b>仅限 infrastructure 层使用。</b></p>
+     * <p>
+     * <b>仅限 infrastructure 层使用。</b>
+     * </p>
      */
-    public static Goods reconstitute(Long id,
-                                     String goodsName,
-                                     String goodsImg,
-                                     Money goodsPrice,
-                                     int goodsStock,
-                                     LocalDateTime createTime,
-                                     LocalDateTime updateTime) {
+    public static Goods reconstitute(Long id, String goodsName, String goodsImg, Money goodsPrice, int goodsStock,
+        LocalDateTime createTime, LocalDateTime updateTime) {
         return new Goods(id, goodsName, goodsImg, goodsPrice, goodsStock, createTime, updateTime);
     }
 

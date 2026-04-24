@@ -5,10 +5,10 @@ import java.util.Optional;
 
 /**
  * 秒杀商品仓储接口（领域层定义）。
- *
- * <p>除基本 CRUD 外，提供数据库层面的原子库存操作
- * （{@link #decreaseStock} / {@link #increaseStock}），
- * 配合 SQL {@code UPDATE ... WHERE stock > 0} 实现防超卖。</p>
+ * <p>
+ * 除基本 CRUD 外，提供数据库层面的原子库存操作 （{@link #decreaseStock} / {@link #increaseStock}）， 配合 SQL
+ * {@code UPDATE ... WHERE stock > 0} 实现防超卖。
+ * </p>
  */
 public interface SeckillGoodsRepository {
 

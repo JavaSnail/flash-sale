@@ -1,5 +1,11 @@
 package com.flashsale.admin.application;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.stereotype.Service;
+
 import com.flashsale.admin.api.dto.DashboardDTO;
 import com.flashsale.admin.api.dto.SeckillActivityDTO;
 import com.flashsale.admin.domain.Money;
@@ -9,20 +15,15 @@ import com.flashsale.admin.domain.TimeRange;
 import com.flashsale.common.exception.BizException;
 import com.flashsale.common.result.ErrorCode;
 import com.flashsale.goods.api.feign.GoodsFeignClient;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * 管理后台应用服务。
- *
- * <p>编排秒杀活动管理用例，包含活动 CRUD、库存预热触发和仪表盘统计。
- * 活动创建委托给 {@link SeckillActivity#create} 领域工厂，
- * 本服务不包含业务规则。</p>
+ * <p>
+ * 编排秒杀活动管理用例，包含活动 CRUD、库存预热触发和仪表盘统计。 活动创建委托给 {@link SeckillActivity#create} 领域工厂， 本服务不包含业务规则。
+ * </p>
  */
 @Slf4j
 @Service
@@ -30,16 +31,16 @@ import java.util.stream.Collectors;
 public class AdminService {
 
     private final SeckillActivityRepository activityRepository;
+
     private final GoodsFeignClient goodsFeignClient;
+
     private final StringRedisTemplate redisTemplate;
 
     /**
      * 查询所有秒杀活动。
      */
     public List<SeckillActivityDTO> listActivities() {
-        return activityRepository.findAll().stream()
-                .map(this::toDTO)
-                .collect(Collectors.toList());
+        return activityRepository.findAll().stream().map(this::toDTO).collect(Collectors.toList());
     }
 
     /**
@@ -50,26 +51,21 @@ public class AdminService {
      */
     public SeckillActivityDTO getActivity(Long id) {
         SeckillActivity activity = activityRepository.findById(id)
-                .orElseThrow(() -> new BizException(ErrorCode.NOT_FOUND));
+            .orElseThrow(() -> new BizException(ErrorCode.NOT_FOUND));
         return toDTO(activity);
     }
 
     /**
      * 创建新秒杀活动。
-     *
-     * <p>通过 {@link SeckillActivity#create} 领域工厂构建聚合根，
-     * 初始状态为 PENDING，参数校验由工厂和值对象内部完成。</p>
+     * <p>
+     * 通过 {@link SeckillActivity#create} 领域工厂构建聚合根， 初始状态为 PENDING，参数校验由工厂和值对象内部完成。
+     * </p>
      *
      * @param dto 活动信息
      */
     public void createActivity(SeckillActivityDTO dto) {
-        SeckillActivity activity = SeckillActivity.create(
-                dto.getActivityName(),
-                dto.getGoodsId(),
-                Money.of(dto.getSeckillPrice()),
-                dto.getStockCount(),
-                new TimeRange(dto.getStartTime(), dto.getEndTime())
-        );
+        SeckillActivity activity = SeckillActivity.create(dto.getActivityName(), dto.getGoodsId(),
+            Money.of(dto.getSeckillPrice()), dto.getStockCount(), new TimeRange(dto.getStartTime(), dto.getEndTime()));
         activityRepository.save(activity);
     }
 

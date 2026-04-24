@@ -4,15 +4,16 @@ import java.time.LocalDateTime;
 
 /**
  * 秒杀商品聚合根。
- *
- * <p>封装秒杀商品的库存管理与时间窗口判断逻辑。
- * 库存扣减行为内聚在聚合根中，替代 Service 层的 if-else 散装逻辑。</p>
- *
+ * <p>
+ * 封装秒杀商品的库存管理与时间窗口判断逻辑。 库存扣减行为内聚在聚合根中，替代 Service 层的 if-else 散装逻辑。
+ * </p>
  * <h3>时间判断</h3>
- * <p>提供两种 API 风格：</p>
+ * <p>
+ * 提供两种 API 风格：
+ * </p>
  * <ul>
- *   <li>{@code isOngoingAt(now)} — 显式注入时钟，便于单元测试</li>
- *   <li>{@code isOngoing()} — 便捷方法，使用系统时钟（兼容旧 API）</li>
+ * <li>{@code isOngoingAt(now)} — 显式注入时钟，便于单元测试</li>
+ * <li>{@code isOngoing()} — 便捷方法，使用系统时钟（兼容旧 API）</li>
  * </ul>
  *
  * @see Money
@@ -24,20 +25,21 @@ public class SeckillGoods {
     // ==================== 字段 ====================
 
     private final Long id;
+
     private final Long goodsId;
+
     private final Money seckillPrice;
+
     private int stockCount;
+
     private final TimeRange timeRange;
+
     private final LocalDateTime createTime;
 
     // ==================== 私有构造器 ====================
 
-    private SeckillGoods(Long id,
-                         Long goodsId,
-                         Money seckillPrice,
-                         int stockCount,
-                         TimeRange timeRange,
-                         LocalDateTime createTime) {
+    private SeckillGoods(Long id, Long goodsId, Money seckillPrice, int stockCount, TimeRange timeRange,
+        LocalDateTime createTime) {
         this.id = id;
         this.goodsId = goodsId;
         this.seckillPrice = seckillPrice;
@@ -51,10 +53,10 @@ public class SeckillGoods {
     /**
      * 创建新秒杀商品。
      *
-     * @param goodsId      关联的商品 ID
+     * @param goodsId 关联的商品 ID
      * @param seckillPrice 秒杀价格
-     * @param stockCount   秒杀库存
-     * @param timeRange    秒杀时间窗口
+     * @param stockCount 秒杀库存
+     * @param timeRange 秒杀时间窗口
      * @return 尚未持久化的秒杀商品（id = null）
      */
     public static SeckillGoods create(Long goodsId, Money seckillPrice, int stockCount, TimeRange timeRange) {
@@ -70,12 +72,8 @@ public class SeckillGoods {
     /**
      * 从持久化存储重建领域对象。<b>仅限 infrastructure 层使用。</b>
      */
-    public static SeckillGoods reconstitute(Long id,
-                                            Long goodsId,
-                                            Money seckillPrice,
-                                            int stockCount,
-                                            TimeRange timeRange,
-                                            LocalDateTime createTime) {
+    public static SeckillGoods reconstitute(Long id, Long goodsId, Money seckillPrice, int stockCount,
+        TimeRange timeRange, LocalDateTime createTime) {
         return new SeckillGoods(id, goodsId, seckillPrice, stockCount, timeRange, createTime);
     }
 
@@ -83,9 +81,9 @@ public class SeckillGoods {
 
     /**
      * 内存中的库存扣减。
-     *
-     * <p>注意：这是聚合根内部的逻辑扣减，实际的持久化层原子扣减
-     * 由 {@link SeckillGoodsRepository#decreaseStock(Long)} 负责。</p>
+     * <p>
+     * 注意：这是聚合根内部的逻辑扣减，实际的持久化层原子扣减 由 {@link SeckillGoodsRepository#decreaseStock(Long)} 负责。
+     * </p>
      *
      * @throws StockInsufficientException 库存不足时抛出
      */

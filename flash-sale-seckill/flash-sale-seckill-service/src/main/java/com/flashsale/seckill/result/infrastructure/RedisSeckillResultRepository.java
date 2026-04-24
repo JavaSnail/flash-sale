@@ -1,12 +1,14 @@
 package com.flashsale.seckill.result.infrastructure;
 
-import com.flashsale.seckill.result.domain.SeckillResultRepository;
-import lombok.RequiredArgsConstructor;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
+
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
-import java.util.concurrent.TimeUnit;
+import com.flashsale.seckill.result.domain.SeckillResultRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
@@ -20,14 +22,12 @@ public class RedisSeckillResultRepository implements SeckillResultRepository {
 
     @Override
     public void saveSuccess(Long userId, Long seckillGoodsId, Long orderId) {
-        redisTemplate.opsForValue().set(key(userId, seckillGoodsId),
-                orderId.toString(), 24, TimeUnit.HOURS);
+        redisTemplate.opsForValue().set(key(userId, seckillGoodsId), orderId.toString(), 24, TimeUnit.HOURS);
     }
 
     @Override
     public void saveFail(Long userId, Long seckillGoodsId, String reason) {
-        redisTemplate.opsForValue().set(key(userId, seckillGoodsId),
-                "fail:" + reason, 24, TimeUnit.HOURS);
+        redisTemplate.opsForValue().set(key(userId, seckillGoodsId), "fail:" + reason, 24, TimeUnit.HOURS);
     }
 
     @Override

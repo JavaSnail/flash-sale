@@ -1,12 +1,14 @@
 package com.flashsale.seckill.token.infrastructure;
 
-import com.flashsale.seckill.token.domain.SeckillToken;
-import com.flashsale.seckill.token.domain.SeckillTokenRepository;
-import lombok.RequiredArgsConstructor;
+import java.util.concurrent.TimeUnit;
+
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.concurrent.TimeUnit;
+import com.flashsale.seckill.token.domain.SeckillToken;
+import com.flashsale.seckill.token.domain.SeckillTokenRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
@@ -20,8 +22,8 @@ public class RedisSeckillTokenRepository implements SeckillTokenRepository {
 
     @Override
     public void save(SeckillToken token, int ttlSeconds) {
-        redisTemplate.opsForValue().set(key(token.getUserId(), token.getSeckillGoodsId()),
-                token.getToken(), ttlSeconds, TimeUnit.SECONDS);
+        redisTemplate.opsForValue().set(key(token.getUserId(), token.getSeckillGoodsId()), token.getToken(), ttlSeconds,
+            TimeUnit.SECONDS);
     }
 
     @Override

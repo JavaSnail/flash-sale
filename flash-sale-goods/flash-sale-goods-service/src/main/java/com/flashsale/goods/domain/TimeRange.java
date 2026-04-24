@@ -4,13 +4,12 @@ import java.time.LocalDateTime;
 
 /**
  * 值对象：时间区间（半开区间 [start, end)）。
- *
- * <p>不可变对象，创建时保证 start &lt; end。
- * 封装秒杀活动/商品的"开始 ~ 结束"时间窗口，
- * 提供时间判断行为，替代散落在 Service 层的 if-else。</p>
+ * <p>
+ * 不可变对象，创建时保证 start &lt; end。 封装秒杀活动/商品的"开始 ~ 结束"时间窗口， 提供时间判断行为，替代散落在 Service 层的 if-else。
+ * </p>
  *
  * @param start 起始时间（含）
- * @param end   结束时间（不含）
+ * @param end 结束时间（不含）
  * @throws IllegalArgumentException 当起止时间为 null 或 start >= end 时抛出
  */
 public record TimeRange(LocalDateTime start, LocalDateTime end) {

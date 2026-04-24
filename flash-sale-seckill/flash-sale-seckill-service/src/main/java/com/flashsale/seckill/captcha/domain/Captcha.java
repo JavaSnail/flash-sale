@@ -1,7 +1,9 @@
 package com.flashsale.seckill.captcha.domain;
 
 public class Captcha {
+
     private final String expression;
+
     private final int answer;
 
     public Captcha(String expression, int answer) {
@@ -13,6 +15,11 @@ public class Captcha {
         return input == answer;
     }
 
-    public String getExpression() { return expression; }
-    public int getAnswer() { return answer; }
+    public String getExpression() {
+        return expression;
+    }
+
+    public int getAnswer() {
+        return answer;
+    }
 }

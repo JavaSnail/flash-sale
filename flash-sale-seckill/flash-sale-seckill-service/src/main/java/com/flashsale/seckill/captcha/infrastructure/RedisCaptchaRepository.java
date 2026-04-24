@@ -1,12 +1,14 @@
 package com.flashsale.seckill.captcha.infrastructure;
 
-import com.flashsale.seckill.captcha.domain.CaptchaRepository;
-import lombok.RequiredArgsConstructor;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
+
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
-import java.util.concurrent.TimeUnit;
+import com.flashsale.seckill.captcha.domain.CaptchaRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
@@ -20,8 +22,8 @@ public class RedisCaptchaRepository implements CaptchaRepository {
 
     @Override
     public void save(Long userId, Long seckillGoodsId, int answer, int ttlSeconds) {
-        redisTemplate.opsForValue().set(key(userId, seckillGoodsId),
-                String.valueOf(answer), ttlSeconds, TimeUnit.SECONDS);
+        redisTemplate.opsForValue().set(key(userId, seckillGoodsId), String.valueOf(answer), ttlSeconds,
+            TimeUnit.SECONDS);
     }
 
     @Override

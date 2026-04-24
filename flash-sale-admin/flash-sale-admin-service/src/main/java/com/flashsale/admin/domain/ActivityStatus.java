@@ -2,12 +2,13 @@ package com.flashsale.admin.domain;
 
 /**
  * 秒杀活动状态枚举。
- *
- * <p>状态机转换规则：{@code PENDING → ONGOING → ENDED}。
- * 使用枚举替代原来的 {@code Integer status}，
- * 消除魔法数字，状态转换逻辑内聚在 {@link SeckillActivity} 聚合根中。</p>
- *
- * <p>每个枚举值持有一个整数 {@code code}，用于数据库持久化时的映射。</p>
+ * <p>
+ * 状态机转换规则：{@code PENDING → ONGOING → ENDED}。 使用枚举替代原来的 {@code Integer status}， 消除魔法数字，状态转换逻辑内聚在 {@link SeckillActivity}
+ * 聚合根中。
+ * </p>
+ * <p>
+ * 每个枚举值持有一个整数 {@code code}，用于数据库持久化时的映射。
+ * </p>
  */
 public enum ActivityStatus {
 

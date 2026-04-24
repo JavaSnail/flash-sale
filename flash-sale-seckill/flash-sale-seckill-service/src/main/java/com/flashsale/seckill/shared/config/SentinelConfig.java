@@ -1,13 +1,15 @@
 package com.flashsale.seckill.shared.config;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.context.annotation.Configuration;
+
 import com.alibaba.csp.sentinel.slots.block.RuleConstant;
 import com.alibaba.csp.sentinel.slots.block.flow.FlowRule;
 import com.alibaba.csp.sentinel.slots.block.flow.FlowRuleManager;
-import jakarta.annotation.PostConstruct;
-import org.springframework.context.annotation.Configuration;
 
-import java.util.ArrayList;
-import java.util.List;
+import jakarta.annotation.PostConstruct;
 
 @Configuration
 public class SentinelConfig {

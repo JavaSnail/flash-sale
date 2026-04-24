@@ -1,12 +1,20 @@
 package com.flashsale.pay.adapter.web;
 
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.flashsale.common.result.Result;
 import com.flashsale.pay.api.dto.PayRequestDTO;
 import com.flashsale.pay.api.dto.PayResultDTO;
 import com.flashsale.pay.application.PayService;
+
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/pay")
@@ -21,9 +29,8 @@ public class PayController {
     }
 
     @PostMapping("/callback")
-    public Result<Void> callback(@RequestParam Long orderId,
-                                  @RequestParam String tradeNo,
-                                  @RequestParam boolean success) {
+    public Result<Void> callback(@RequestParam Long orderId, @RequestParam String tradeNo,
+        @RequestParam boolean success) {
         payService.handlePayCallback(orderId, tradeNo, success);
         return Result.success();
     }

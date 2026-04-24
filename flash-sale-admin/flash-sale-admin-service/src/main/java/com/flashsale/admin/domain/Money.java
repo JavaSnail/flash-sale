@@ -4,9 +4,9 @@ import java.math.BigDecimal;
 
 /**
  * 值对象：金额（非负）。
- *
- * <p>与 goods 模块的 Money 值对象功能相同，
- * 因 admin 模块不依赖 goods-service 而独立定义。</p>
+ * <p>
+ * 与 goods 模块的 Money 值对象功能相同， 因 admin 模块不依赖 goods-service 而独立定义。
+ * </p>
  *
  * @param amount 金额数值，必须 >= 0
  */

@@ -1,5 +1,10 @@
 package com.flashsale.seckill.execution.application;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import org.springframework.stereotype.Service;
+
 import com.flashsale.common.exception.BizException;
 import com.flashsale.common.result.ErrorCode;
 import com.flashsale.seckill.execution.application.dto.SeckillCommand;
@@ -7,12 +12,9 @@ import com.flashsale.seckill.execution.domain.SeckillUserRepository;
 import com.flashsale.seckill.execution.domain.StockRepository;
 import com.flashsale.seckill.execution.domain.event.SeckillOrderEvent;
 import com.flashsale.seckill.token.application.SeckillTokenService;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @Service
@@ -20,8 +22,11 @@ import java.util.concurrent.ConcurrentHashMap;
 public class SeckillExecutionService {
 
     private final StockRepository stockRepository;
+
     private final SeckillUserRepository seckillUserRepository;
+
     private final SeckillTokenService tokenService;
+
     private final SeckillMessageSender messageSender;
 
     // Local memory flag for sold-out goods (reduces Redis access)

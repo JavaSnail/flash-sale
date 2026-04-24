@@ -1,20 +1,23 @@
 package com.flashsale.seckill.execution.adapter.mq;
 
-import com.flashsale.common.constant.MQConstants;
-import com.flashsale.seckill.execution.application.SeckillMessageSender;
-import com.flashsale.seckill.execution.domain.event.SeckillOrderEvent;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.flashsale.common.constant.MQConstants;
+import com.flashsale.seckill.execution.application.SeckillMessageSender;
+import com.flashsale.seckill.execution.domain.event.SeckillOrderEvent;
+
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 
 @Component
 @RequiredArgsConstructor
 public class RocketMQSeckillMessageProducer implements SeckillMessageSender {
 
     private final RocketMQTemplate rocketMQTemplate;
+
     private final ObjectMapper objectMapper;
 
     @SneakyThrows

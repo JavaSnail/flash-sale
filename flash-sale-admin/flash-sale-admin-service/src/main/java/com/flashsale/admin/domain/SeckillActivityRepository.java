@@ -26,7 +26,7 @@ public interface SeckillActivityRepository {
     /**
      * 直接更新活动状态（数据库层操作，用于状态持久化）。
      *
-     * @param id     活动 ID
+     * @param id 活动 ID
      * @param status 目标状态码
      */
     void updateStatus(Long id, int status);

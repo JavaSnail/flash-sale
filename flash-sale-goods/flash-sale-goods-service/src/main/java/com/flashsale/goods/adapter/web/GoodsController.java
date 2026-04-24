@@ -1,12 +1,18 @@
 package com.flashsale.goods.adapter.web;
 
+import java.util.List;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.flashsale.common.result.Result;
 import com.flashsale.goods.api.dto.SeckillGoodsDTO;
 import com.flashsale.goods.application.GoodsService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/goods")

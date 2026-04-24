@@ -1,12 +1,16 @@
 package com.flashsale.seckill.api.dto;
 
-import lombok.Data;
 import java.io.Serializable;
+
+import lombok.Data;
 
 @Data
 public class SeckillResultDTO implements Serializable {
+
     private Long orderId;
+
     private int status; // 0-排队中 1-成功 -1-失败
+
     private String message;
 
     public static SeckillResultDTO queuing() {

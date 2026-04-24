@@ -1,22 +1,24 @@
 package com.flashsale.goods.infrastructure;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Repository;
+
 import com.flashsale.goods.domain.Money;
 import com.flashsale.goods.domain.SeckillGoods;
 import com.flashsale.goods.domain.SeckillGoodsRepository;
 import com.flashsale.goods.domain.TimeRange;
 import com.flashsale.goods.infrastructure.mapper.SeckillGoodsMapper;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 
 /**
  * 秒杀商品仓储 MyBatis 实现。
- *
- * <p>库存扣减/回滚委托给 Mapper 的自定义 SQL（{@code UPDATE ... WHERE stock > 0}），
- * 保证数据库层面的原子性防超卖。</p>
+ * <p>
+ * 库存扣减/回滚委托给 Mapper 的自定义 SQL（{@code UPDATE ... WHERE stock > 0}）， 保证数据库层面的原子性防超卖。
+ * </p>
  */
 @Repository
 @RequiredArgsConstructor
@@ -31,9 +33,7 @@ public class MyBatisSeckillGoodsRepository implements SeckillGoodsRepository {
 
     @Override
     public List<SeckillGoods> findAll() {
-        return mapper.selectList(null).stream()
-                .map(this::toDomain)
-                .collect(Collectors.toList());
+        return mapper.selectList(null).stream().map(this::toDomain).collect(Collectors.toList());
     }
 
     @Override
@@ -42,7 +42,8 @@ public class MyBatisSeckillGoodsRepository implements SeckillGoodsRepository {
         if (sg.getId() == null) {
             mapper.insert(d);
             return sg.withId(d.getId());
-        } else {
+        }
+        else {
             mapper.updateById(d);
             return sg;
         }
@@ -64,14 +65,9 @@ public class MyBatisSeckillGoodsRepository implements SeckillGoodsRepository {
      * 数据对象 → 领域对象。将扁平的 startTime/endTime 组合为 {@link TimeRange} 值对象。
      */
     private SeckillGoods toDomain(SeckillGoodsDO d) {
-        return SeckillGoods.reconstitute(
-                d.getId(),
-                d.getGoodsId(),
-                Money.of(d.getSeckillPrice()),
-                d.getStockCount() == null ? 0 : d.getStockCount(),
-                new TimeRange(d.getStartTime(), d.getEndTime()),
-                d.getCreateTime()
-        );
+        return SeckillGoods.reconstitute(d.getId(), d.getGoodsId(), Money.of(d.getSeckillPrice()),
+            d.getStockCount() == null ? 0 : d.getStockCount(), new TimeRange(d.getStartTime(), d.getEndTime()),
+            d.getCreateTime());
     }
 
     /**
