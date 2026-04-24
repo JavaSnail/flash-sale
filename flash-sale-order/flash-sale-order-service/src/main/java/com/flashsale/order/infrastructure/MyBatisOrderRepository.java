@@ -1,13 +1,19 @@
 package com.flashsale.order.infrastructure;
 
-import com.flashsale.order.domain.Order;
-import com.flashsale.order.domain.OrderRepository;
-import com.flashsale.order.infrastructure.mapper.OrderMapper;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
-
 import java.util.Optional;
 
+import org.springframework.stereotype.Repository;
+
+import com.flashsale.order.domain.Order;
+import com.flashsale.order.domain.OrderRepository;
+import com.flashsale.order.domain.OrderStatus;
+import com.flashsale.order.infrastructure.mapper.OrderMapper;
+
+import lombok.RequiredArgsConstructor;
+
+/**
+ * 订单仓储 MyBatis 实现。
+ */
 @Repository
 @RequiredArgsConstructor
 public class MyBatisOrderRepository implements OrderRepository {
@@ -15,13 +21,15 @@ public class MyBatisOrderRepository implements OrderRepository {
     private final OrderMapper orderMapper;
 
     @Override
-    public void save(Order order) {
+    public Order save(Order order) {
         OrderDO orderDO = toDO(order);
         if (order.getId() == null) {
             orderMapper.insert(orderDO);
-            order.setId(orderDO.getId());
-        } else {
+            return order.withId(orderDO.getId());
+        }
+        else {
             orderMapper.updateById(orderDO);
+            return order;
         }
     }
 
@@ -35,19 +43,19 @@ public class MyBatisOrderRepository implements OrderRepository {
         orderMapper.updateStatus(id, status);
     }
 
+    // ==================== DO ↔ Domain 转换 ====================
+
+    /**
+     * 数据对象 → 领域对象。将 Integer status 转换为 {@link OrderStatus} 枚举。
+     */
     private Order toDomain(OrderDO d) {
-        Order o = new Order();
-        o.setId(d.getId());
-        o.setUserId(d.getUserId());
-        o.setSeckillGoodsId(d.getSeckillGoodsId());
-        o.setGoodsId(d.getGoodsId());
-        o.setOrderPrice(d.getOrderPrice());
-        o.setStatus(d.getStatus());
-        o.setCreateTime(d.getCreateTime());
-        o.setUpdateTime(d.getUpdateTime());
-        return o;
+        return Order.reconstitute(d.getId(), d.getUserId(), d.getSeckillGoodsId(), d.getGoodsId(), d.getOrderPrice(),
+            OrderStatus.fromCode(d.getStatus() == null ? 0 : d.getStatus()), d.getCreateTime(), d.getUpdateTime());
     }
 
+    /**
+     * 领域对象 → 数据对象。将 {@link OrderStatus} 枚举转换为 Integer code。
+     */
     private OrderDO toDO(Order o) {
         OrderDO d = new OrderDO();
         d.setId(o.getId());
@@ -55,7 +63,7 @@ public class MyBatisOrderRepository implements OrderRepository {
         d.setSeckillGoodsId(o.getSeckillGoodsId());
         d.setGoodsId(o.getGoodsId());
         d.setOrderPrice(o.getOrderPrice());
-        d.setStatus(o.getStatus());
+        d.setStatus(o.getStatus().code());
         return d;
     }
 }

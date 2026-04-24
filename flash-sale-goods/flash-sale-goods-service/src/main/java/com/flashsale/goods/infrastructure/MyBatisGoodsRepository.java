@@ -2,6 +2,7 @@ package com.flashsale.goods.infrastructure;
 
 import com.flashsale.goods.domain.Goods;
 import com.flashsale.goods.domain.GoodsRepository;
+import com.flashsale.goods.domain.Money;
 import com.flashsale.goods.infrastructure.mapper.GoodsMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -10,6 +11,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * 商品仓储 MyBatis 实现。
+ */
 @Repository
 @RequiredArgsConstructor
 public class MyBatisGoodsRepository implements GoodsRepository {
@@ -23,30 +27,35 @@ public class MyBatisGoodsRepository implements GoodsRepository {
 
     @Override
     public List<Goods> findAll() {
-        return goodsMapper.selectList(null).stream().map(this::toDomain).collect(Collectors.toList());
+        return goodsMapper.selectList(null).stream()
+                .map(this::toDomain)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public void save(Goods goods) {
+    public Goods save(Goods goods) {
         GoodsDO goodsDO = toDO(goods);
         if (goods.getId() == null) {
             goodsMapper.insert(goodsDO);
-            goods.setId(goodsDO.getId());
+            return goods.withId(goodsDO.getId());
         } else {
             goodsMapper.updateById(goodsDO);
+            return goods;
         }
     }
 
+    // ==================== DO ↔ Domain 转换 ====================
+
     private Goods toDomain(GoodsDO d) {
-        Goods g = new Goods();
-        g.setId(d.getId());
-        g.setGoodsName(d.getGoodsName());
-        g.setGoodsImg(d.getGoodsImg());
-        g.setGoodsPrice(d.getGoodsPrice());
-        g.setGoodsStock(d.getGoodsStock());
-        g.setCreateTime(d.getCreateTime());
-        g.setUpdateTime(d.getUpdateTime());
-        return g;
+        return Goods.reconstitute(
+                d.getId(),
+                d.getGoodsName(),
+                d.getGoodsImg(),
+                Money.of(d.getGoodsPrice()),
+                d.getGoodsStock() == null ? 0 : d.getGoodsStock(),
+                d.getCreateTime(),
+                d.getUpdateTime()
+        );
     }
 
     private GoodsDO toDO(Goods g) {
@@ -54,7 +63,7 @@ public class MyBatisGoodsRepository implements GoodsRepository {
         d.setId(g.getId());
         d.setGoodsName(g.getGoodsName());
         d.setGoodsImg(g.getGoodsImg());
-        d.setGoodsPrice(g.getGoodsPrice());
+        d.setGoodsPrice(g.getGoodsPrice().amount());
         d.setGoodsStock(g.getGoodsStock());
         return d;
     }
