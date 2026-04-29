@@ -50,30 +50,30 @@ knife4j:
       - name: 用户服务
         service-name: flash-sale-user
         url: /user/v3/api-docs
-        context-path: /user
+        context-path: /
         order: 1
       - name: 商品服务
         service-name: flash-sale-goods
         url: /goods/v3/api-docs
-        context-path: /goods
+        context-path: /
         order: 2
       - name: 秒杀服务
         service-name: flash-sale-seckill
         url: /seckill/v3/api-docs
-        context-path: /seckill
+        context-path: /
         order: 3
       - name: 订单服务
         service-name: flash-sale-order
         url: /order/v3/api-docs
-        context-path: /order
+        context-path: /
         order: 4
       - name: 支付服务
         service-name: flash-sale-pay
         url: /pay/v3/api-docs
-        context-path: /pay
+        context-path: /
         order: 5
       - name: 管理后台
         service-name: flash-sale-admin
         url: /admin/v3/api-docs
-        context-path: /admin
+        context-path: /
         order: 6

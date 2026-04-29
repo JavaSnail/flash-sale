@@ -34,6 +34,7 @@ mybatis-plus:
 springdoc:
   api-docs:
     enabled: true
+    path: /goods/v3/api-docs
   swagger-ui:
     enabled: true
 
