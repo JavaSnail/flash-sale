@@ -2,5 +2,5 @@ spring:
   cloud:
     nacos:
       config:
-        server-addr: ${NACOS_ADDR:127.0.0.1:8848}
+        server-addr: ${NACOS_ADDR:161.118.240.213:8848}
         file-extension: yml

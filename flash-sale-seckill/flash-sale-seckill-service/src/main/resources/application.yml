@@ -5,24 +5,29 @@ spring:
   application:
     name: flash-sale-seckill
   datasource:
-    url: jdbc:mysql://${MYSQL_HOST:127.0.0.1}:3306/flash_sale_seckill?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://${MYSQL_HOST:161.118.240.213}:3306/flash_sale_seckill?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
     username: ${MYSQL_USER:root}
     password: ${MYSQL_PASS:root}
     driver-class-name: com.mysql.cj.jdbc.Driver
   cloud:
     nacos:
+      server-addr: ${NACOS_ADDR:161.118.240.213:8848}
       discovery:
-        server-addr: ${NACOS_ADDR:127.0.0.1:8848}
+        server-addr: ${NACOS_ADDR:161.118.240.213:8848}
+      config:
+        server-addr: ${NACOS_ADDR:161.118.240.213:8848}
+        import-check:
+          enabled: false
     sentinel:
       transport:
-        dashboard: ${SENTINEL_DASHBOARD:127.0.0.1:8080}
+        dashboard: ${SENTINEL_DASHBOARD:161.118.240.213:8858}
   data:
     redis:
-      host: ${REDIS_HOST:127.0.0.1}
+      host: ${REDIS_HOST:161.118.240.213}
       port: ${REDIS_PORT:6379}
 
 rocketmq:
-  name-server: ${ROCKETMQ_NAMESRV:127.0.0.1:9876}
+  name-server: ${ROCKETMQ_NAMESRV:161.118.240.213:9876}
   producer:
     group: seckill-producer-group
 

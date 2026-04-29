@@ -7,7 +7,7 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: ${NACOS_ADDR:127.0.0.1:8848}
+        server-addr: ${NACOS_ADDR:161.118.240.213:8848}
     gateway:
       routes:
         - id: user-service
@@ -36,8 +36,8 @@ spring:
             - Path=/admin/**
     sentinel:
       transport:
-        dashboard: ${SENTINEL_DASHBOARD:127.0.0.1:8080}
+        dashboard: ${SENTINEL_DASHBOARD:161.118.240.213:8858}
   data:
     redis:
-      host: ${REDIS_HOST:127.0.0.1}
+      host: ${REDIS_HOST:161.118.240.213}
       port: ${REDIS_PORT:6379}
