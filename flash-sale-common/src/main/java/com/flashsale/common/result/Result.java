@@ -2,6 +2,7 @@ package com.flashsale.common.result;
 
 import java.io.Serializable;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,14 +18,18 @@ import lombok.NoArgsConstructor;
  * <li>{@code data} — 业务数据（泛型）</li>
  * </ul>
  */
+@Schema(description = "统一响应结果")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Result<T> implements Serializable {
+    @Schema(description = "状态码，0表示成功，非0为错误码", example = "0")
     private int code;
 
+    @Schema(description = "提示信息", example = "success")
     private String msg;
 
+    @Schema(description = "业务数据")
     private T data;
 
     public static <T> Result<T> success(T data) {

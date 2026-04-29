@@ -41,3 +41,39 @@ spring:
     redis:
       host: ${REDIS_HOST:161.118.240.213}
       port: ${REDIS_PORT:6379}
+
+knife4j:
+  gateway:
+    enabled: true
+    strategy: manual
+    routes:
+      - name: 用户服务
+        service-name: flash-sale-user
+        url: /user/v3/api-docs
+        context-path: /user
+        order: 1
+      - name: 商品服务
+        service-name: flash-sale-goods
+        url: /goods/v3/api-docs
+        context-path: /goods
+        order: 2
+      - name: 秒杀服务
+        service-name: flash-sale-seckill
+        url: /seckill/v3/api-docs
+        context-path: /seckill
+        order: 3
+      - name: 订单服务
+        service-name: flash-sale-order
+        url: /order/v3/api-docs
+        context-path: /order
+        order: 4
+      - name: 支付服务
+        service-name: flash-sale-pay
+        url: /pay/v3/api-docs
+        context-path: /pay
+        order: 5
+      - name: 管理后台
+        service-name: flash-sale-admin
+        url: /admin/v3/api-docs
+        context-path: /admin
+        order: 6

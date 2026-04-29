@@ -12,8 +12,12 @@ import com.flashsale.common.result.Result;
 import com.flashsale.goods.api.dto.SeckillGoodsDTO;
 import com.flashsale.goods.application.GoodsService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
+@Tag(name = "商品管理", description = "秒杀商品查询、库存预热接口")
 @RestController
 @RequestMapping("/goods")
 @RequiredArgsConstructor
@@ -21,21 +25,25 @@ public class GoodsController {
 
     private final GoodsService goodsService;
 
+    @Operation(summary = "查询秒杀商品列表", description = "获取所有秒杀商品信息")
     @GetMapping("/seckill/list")
     public Result<List<SeckillGoodsDTO>> listSeckillGoods() {
         return Result.success(goodsService.listSeckillGoods());
     }
 
+    @Operation(summary = "查询秒杀商品详情", description = "根据ID获取秒杀商品详细信息")
     @GetMapping("/seckill/{id}")
-    public Result<SeckillGoodsDTO> getSeckillGoods(@PathVariable Long id) {
+    public Result<SeckillGoodsDTO> getSeckillGoods(@Parameter(description = "秒杀商品ID") @PathVariable Long id) {
         return Result.success(goodsService.getSeckillGoods(id));
     }
 
+    @Operation(summary = "查询秒杀商品库存", description = "根据ID获取秒杀商品剩余库存")
     @GetMapping("/seckill/{id}/stock")
-    public Result<Integer> getStock(@PathVariable Long id) {
+    public Result<Integer> getStock(@Parameter(description = "秒杀商品ID") @PathVariable Long id) {
         return Result.success(goodsService.getStock(id));
     }
 
+    @Operation(summary = "库存预热", description = "将秒杀商品库存预热到Redis缓存")
     @PostMapping("/seckill/warmup")
     public Result<Void> warmUp() {
         goodsService.warmUpStock();

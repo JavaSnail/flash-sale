@@ -2,15 +2,20 @@ package com.flashsale.seckill.api.dto;
 
 import java.io.Serializable;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
+@Schema(description = "秒杀结果")
 @Data
 public class SeckillResultDTO implements Serializable {
 
+    @Schema(description = "订单ID（秒杀成功时返回）", example = "1001")
     private Long orderId;
 
-    private int status; // 0-排队中 1-成功 -1-失败
+    @Schema(description = "状态：0-排队中 1-成功 -1-失败", example = "0")
+    private int status;
 
+    @Schema(description = "结果描述", example = "排队中")
     private String message;
 
     public static SeckillResultDTO queuing() {

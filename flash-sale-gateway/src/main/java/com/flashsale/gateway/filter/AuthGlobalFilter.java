@@ -42,7 +42,10 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class AuthGlobalFilter implements GlobalFilter, Ordered {
 
-    private static final List<String> WHITE_LIST = List.of("/user/login", "/user/register", "/seckill/captcha");
+    private static final List<String> WHITE_LIST = List.of(
+            "/user/login", "/user/register", "/seckill/captcha",
+            "/v3/api-docs", "/swagger-ui", "/doc.html", "/webjars/", "/favicon.ico"
+    );
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
