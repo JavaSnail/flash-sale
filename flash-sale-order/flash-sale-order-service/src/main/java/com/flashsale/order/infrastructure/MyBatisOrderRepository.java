@@ -1,6 +1,8 @@
 package com.flashsale.order.infrastructure;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Repository;
 
@@ -36,6 +38,11 @@ public class MyBatisOrderRepository implements OrderRepository {
     @Override
     public Optional<Order> findById(Long id) {
         return Optional.ofNullable(orderMapper.selectById(id)).map(this::toDomain);
+    }
+
+    @Override
+    public List<Order> findAll() {
+        return orderMapper.selectList(null).stream().map(this::toDomain).collect(Collectors.toList());
     }
 
     @Override

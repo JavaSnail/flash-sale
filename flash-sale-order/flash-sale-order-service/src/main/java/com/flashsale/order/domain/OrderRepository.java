@@ -1,5 +1,6 @@
 package com.flashsale.order.domain;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -16,6 +17,11 @@ public interface OrderRepository {
      * 根据 ID 查找订单。
      */
     Optional<Order> findById(Long id);
+
+    /**
+     * 查询所有订单。
+     */
+    List<Order> findAll();
 
     /**
      * 直接更新订单状态（数据库层操作）。

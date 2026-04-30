@@ -1,5 +1,7 @@
 package com.flashsale.pay.adapter.web;
 
+import java.util.List;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,16 +38,22 @@ public class PayController {
     @Operation(summary = "支付回调", description = "第三方支付平台回调通知")
     @PostMapping("/callback")
     public Result<Void> callback(
-            @Parameter(description = "订单ID") @RequestParam Long orderId,
-            @Parameter(description = "第三方交易号") @RequestParam String tradeNo,
-            @Parameter(description = "支付是否成功") @RequestParam boolean success) {
+            @Parameter(description = "订单ID") @RequestParam("orderId") Long orderId,
+            @Parameter(description = "第三方交易号") @RequestParam("tradeNo") String tradeNo,
+            @Parameter(description = "支付是否成功") @RequestParam("success") boolean success) {
         payService.handlePayCallback(orderId, tradeNo, success);
         return Result.success();
     }
 
+    @Operation(summary = "查询支付列表", description = "获取所有支付记录列表")
+    @GetMapping("/list")
+    public Result<List<PayResultDTO>> list() {
+        return Result.success(payService.listPayments());
+    }
+
     @Operation(summary = "查询支付结果", description = "根据订单ID查询支付结果")
     @GetMapping("/{orderId}")
-    public Result<PayResultDTO> getByOrderId(@Parameter(description = "订单ID") @PathVariable Long orderId) {
+    public Result<PayResultDTO> getByOrderId(@Parameter(description = "订单ID") @PathVariable("orderId") Long orderId) {
         return Result.success(payService.getByOrderId(orderId));
     }
 }

@@ -24,9 +24,9 @@ public class SeckillTokenController {
     @Operation(summary = "获取秒杀令牌", description = "验证验证码后生成秒杀令牌")
     @PostMapping
     public Result<String> createToken(
-            @Parameter(description = "用户ID") @RequestParam Long userId,
-            @Parameter(description = "秒杀商品ID") @RequestParam Long seckillGoodsId,
-            @Parameter(description = "验证码答案") @RequestParam int captcha) {
+            @Parameter(description = "用户ID") @RequestParam("userId") Long userId,
+            @Parameter(description = "秒杀商品ID") @RequestParam("seckillGoodsId") Long seckillGoodsId,
+            @Parameter(description = "验证码答案") @RequestParam("captcha") int captcha) {
         return Result.success(tokenService.createToken(userId, seckillGoodsId, captcha));
     }
 }

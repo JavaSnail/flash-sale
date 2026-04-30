@@ -45,6 +45,11 @@ public class MyBatisGoodsRepository implements GoodsRepository {
         }
     }
 
+    @Override
+    public void deleteById(Long id) {
+        goodsMapper.deleteById(id);
+    }
+
     // ==================== DO ↔ Domain 转换 ====================
 
     private Goods toDomain(GoodsDO d) {

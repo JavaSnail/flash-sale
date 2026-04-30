@@ -10,7 +10,16 @@
       "Bash(where java:*)",
       "WebSearch",
       "Bash(jar tf:*)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(npm create:*)",
+      "Bash(npm install:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npm run:*)",
+      "Bash(npx vite:*)",
+      "mcp__ide__getDiagnostics",
+      "Bash(xargs cat:*)",
+      "Bash(cp:*)",
+      "Bash(rm:*)"
     ]
   }
 }

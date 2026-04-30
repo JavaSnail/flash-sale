@@ -28,4 +28,11 @@ public interface GoodsRepository {
      * @return 持久化后的商品
      */
     Goods save(Goods goods);
+
+    /**
+     * 根据 ID 删除商品。
+     *
+     * @param id 商品 ID
+     */
+    void deleteById(Long id);
 }

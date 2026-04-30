@@ -1,5 +1,6 @@
 package com.flashsale.pay.domain;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -19,6 +20,11 @@ public interface PaymentRepository {
      * @return 支付记录，不存在返回 empty
      */
     Optional<Payment> findByOrderId(Long orderId);
+
+    /**
+     * 查询所有支付记录。
+     */
+    List<Payment> findAll();
 
     /**
      * 直接更新支付状态和交易号（数据库层操作）。

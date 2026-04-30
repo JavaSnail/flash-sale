@@ -25,8 +25,8 @@ public class SeckillResultController {
     @Operation(summary = "查询秒杀结果", description = "轮询秒杀结果，返回排队中/成功/失败状态")
     @GetMapping
     public Result<SeckillResultDTO> getResult(
-            @Parameter(description = "用户ID") @RequestParam Long userId,
-            @Parameter(description = "秒杀商品ID") @RequestParam Long seckillGoodsId) {
+            @Parameter(description = "用户ID") @RequestParam("userId") Long userId,
+            @Parameter(description = "秒杀商品ID") @RequestParam("seckillGoodsId") Long seckillGoodsId) {
         return Result.success(resultService.getResult(userId, seckillGoodsId));
     }
 }

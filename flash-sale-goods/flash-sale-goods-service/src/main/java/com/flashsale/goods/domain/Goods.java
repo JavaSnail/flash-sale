@@ -111,6 +111,44 @@ public class Goods {
     }
 
     /**
+     * 修改商品名称。
+     *
+     * @param newName 新名称，不能为空
+     * @throws IllegalArgumentException 当名称为空时抛出
+     */
+    public void rename(String newName) {
+        if (newName == null || newName.isBlank()) {
+            throw new IllegalArgumentException("商品名不能为空");
+        }
+        this.goodsName = newName;
+        this.updateTime = LocalDateTime.now();
+    }
+
+    /**
+     * 修改商品图片。
+     *
+     * @param newImg 新图片 URL
+     */
+    public void changeImage(String newImg) {
+        this.goodsImg = newImg;
+        this.updateTime = LocalDateTime.now();
+    }
+
+    /**
+     * 管理员设定库存绝对值。
+     *
+     * @param newStock 新库存数量，不能为负
+     * @throws IllegalArgumentException 当库存为负时抛出
+     */
+    public void resetStock(int newStock) {
+        if (newStock < 0) {
+            throw new IllegalArgumentException("库存不能为负");
+        }
+        this.goodsStock = newStock;
+        this.updateTime = LocalDateTime.now();
+    }
+
+    /**
      * 判断商品是否有货（库存 > 0）。
      */
     public boolean isAvailable() {

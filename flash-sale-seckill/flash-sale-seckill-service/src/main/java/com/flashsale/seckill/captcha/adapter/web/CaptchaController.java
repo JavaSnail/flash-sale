@@ -22,8 +22,8 @@ public class CaptchaController {
 
     @Operation(summary = "获取验证码", description = "生成秒杀验证码图片")
     @GetMapping
-    public void getCaptcha(@Parameter(description = "用户ID") @RequestParam Long userId,
-                           @Parameter(description = "秒杀商品ID") @RequestParam Long seckillGoodsId,
+    public void getCaptcha(@Parameter(description = "用户ID") @RequestParam("userId") Long userId,
+                           @Parameter(description = "秒杀商品ID") @RequestParam("seckillGoodsId") Long seckillGoodsId,
                            HttpServletResponse response) throws Exception {
         BufferedImage image = captchaService.generateCaptcha(userId, seckillGoodsId);
         response.setContentType("image/jpeg");

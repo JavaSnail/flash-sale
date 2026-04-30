@@ -35,7 +35,7 @@ public class UserController {
 
     @Operation(summary = "根据ID查询用户", description = "根据用户ID获取用户信息")
     @GetMapping("/{id}")
-    public Result<UserDTO> getById(@Parameter(description = "用户ID") @PathVariable Long id) {
+    public Result<UserDTO> getById(@Parameter(description = "用户ID") @PathVariable("id") Long id) {
         return Result.success(userService.getById(id));
     }
 

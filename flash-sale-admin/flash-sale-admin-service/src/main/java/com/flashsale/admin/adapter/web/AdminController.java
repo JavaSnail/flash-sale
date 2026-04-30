@@ -35,7 +35,7 @@ public class AdminController {
 
     @Operation(summary = "查询活动详情", description = "根据ID获取秒杀活动详情")
     @GetMapping("/activities/{id}")
-    public Result<SeckillActivityDTO> getActivity(@Parameter(description = "活动ID") @PathVariable Long id) {
+    public Result<SeckillActivityDTO> getActivity(@Parameter(description = "活动ID") @PathVariable("id") Long id) {
         return Result.success(adminService.getActivity(id));
     }
 

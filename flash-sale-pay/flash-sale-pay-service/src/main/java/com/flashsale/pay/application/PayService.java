@@ -1,5 +1,8 @@
 package com.flashsale.pay.application;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
@@ -91,12 +94,28 @@ public class PayService {
     public PayResultDTO getByOrderId(Long orderId) {
         Payment payment = paymentRepository.findByOrderId(orderId)
             .orElseThrow(() -> new BizException(ErrorCode.PAY_FAIL, "支付记录不存在"));
+        return toDTO(payment);
+    }
 
+    /**
+     * 查询所有支付记录。
+     */
+    public List<PayResultDTO> listPayments() {
+        return paymentRepository.findAll().stream().map(this::toDTO).collect(Collectors.toList());
+    }
+
+    // ==================== DTO 转换 ====================
+
+    private PayResultDTO toDTO(Payment payment) {
         PayResultDTO dto = new PayResultDTO();
         dto.setPayId(payment.getId());
         dto.setOrderId(payment.getOrderId());
+        dto.setUserId(payment.getUserId());
+        dto.setAmount(payment.getAmount());
+        dto.setPayChannel(payment.getPayChannel().name());
         dto.setStatus(payment.getStatus().code());
         dto.setTradeNo(payment.getTradeNo() == null ? null : payment.getTradeNo().value());
+        dto.setCreateTime(payment.getCreateTime());
         return dto;
     }
 }

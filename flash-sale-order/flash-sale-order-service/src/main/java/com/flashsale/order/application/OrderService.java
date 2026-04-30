@@ -14,7 +14,9 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * 订单应用服务。
@@ -118,6 +120,13 @@ public class OrderService {
             log.info("Order cancelled: orderId={}", orderId);
             // TODO: rollback stock via MQ
         }
+    }
+
+    /**
+     * 查询所有订单。
+     */
+    public List<OrderDTO> listOrders() {
+        return orderRepository.findAll().stream().map(this::toDTO).collect(Collectors.toList());
     }
 
     // ==================== DTO 转换 ====================

@@ -1,6 +1,8 @@
 package com.flashsale.pay.infrastructure;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Repository;
 
@@ -43,6 +45,11 @@ public class MyBatisPaymentRepository implements PaymentRepository {
     public Optional<Payment> findByOrderId(Long orderId) {
         PaymentDO d = mapper.selectOne(new LambdaQueryWrapper<PaymentDO>().eq(PaymentDO::getOrderId, orderId));
         return Optional.ofNullable(d).map(this::toDomain);
+    }
+
+    @Override
+    public List<Payment> findAll() {
+        return mapper.selectList(null).stream().map(this::toDomain).collect(Collectors.toList());
     }
 
     @Override
