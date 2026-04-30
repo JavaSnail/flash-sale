@@ -28,11 +28,11 @@ public class SeckillGoods {
 
     private final Long goodsId;
 
-    private final Money seckillPrice;
+    private Money seckillPrice;
 
     private int stockCount;
 
-    private final TimeRange timeRange;
+    private TimeRange timeRange;
 
     private final LocalDateTime createTime;
 
@@ -75,6 +75,23 @@ public class SeckillGoods {
     public static SeckillGoods reconstitute(Long id, Long goodsId, Money seckillPrice, int stockCount,
         TimeRange timeRange, LocalDateTime createTime) {
         return new SeckillGoods(id, goodsId, seckillPrice, stockCount, timeRange, createTime);
+    }
+
+    // ==================== 变更方法 ====================
+
+    public void changeSeckillPrice(Money newPrice) {
+        this.seckillPrice = newPrice;
+    }
+
+    public void resetStock(int newStock) {
+        if (newStock < 0) {
+            throw new IllegalArgumentException("stockCount 不能为负");
+        }
+        this.stockCount = newStock;
+    }
+
+    public void changeTimeRange(TimeRange newRange) {
+        this.timeRange = newRange;
     }
 
     // ==================== 库存行为 ====================

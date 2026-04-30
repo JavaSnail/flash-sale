@@ -73,7 +73,7 @@ public class AdminService {
      * 触发库存预热（通过 Feign 调用商品服务加载库存到 Redis）。
      */
     public void triggerWarmUp() {
-        goodsFeignClient.listSeckillGoods();
+        goodsFeignClient.warmUpStock();
         log.info("Stock warm-up triggered");
     }
 

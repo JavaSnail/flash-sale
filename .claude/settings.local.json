@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(xargs grep:*)",
+      "Bash(mvn compile:*)",
+      "Bash(JAVA_HOME=\"D:/Java/jdk-21\" mvn compile:*)",
+      "Bash(done)",
+      "Bash(java:*)",
+      "Bash(mvn:*)",
+      "Bash(where java:*)",
+      "WebSearch",
+      "Bash(jar tf:*)",
+      "Bash(curl:*)"
+    ]
+  }
+}

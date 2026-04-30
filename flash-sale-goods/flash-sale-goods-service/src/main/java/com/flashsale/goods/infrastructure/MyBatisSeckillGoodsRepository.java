@@ -50,6 +50,11 @@ public class MyBatisSeckillGoodsRepository implements SeckillGoodsRepository {
     }
 
     @Override
+    public void deleteById(Long id) {
+        mapper.deleteById(id);
+    }
+
+    @Override
     public boolean decreaseStock(Long id) {
         return mapper.decreaseStock(id) > 0;
     }

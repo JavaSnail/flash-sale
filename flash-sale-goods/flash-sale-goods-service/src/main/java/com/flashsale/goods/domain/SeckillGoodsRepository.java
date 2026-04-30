@@ -21,6 +21,8 @@ public interface SeckillGoodsRepository {
      */
     SeckillGoods save(SeckillGoods seckillGoods);
 
+    void deleteById(Long id);
+
     /**
      * 数据库层原子扣减库存（{@code UPDATE ... SET stock = stock - 1 WHERE stock > 0}）。
      *

@@ -18,8 +18,14 @@ public class SoldOutBroadcastListener implements MessageListener {
 
     @Override
     public void onMessage(Message message, byte[] pattern) {
-        String seckillGoodsId = new String(message.getBody());
-        log.info("Received sold-out broadcast for seckillGoodsId={}", seckillGoodsId);
-        executionService.onSoldOutBroadcast(Long.parseLong(seckillGoodsId));
+        String body = new String(message.getBody());
+        if (body.startsWith("reset:")) {
+            Long id = Long.parseLong(body.substring(6));
+            log.info("Received sold-out reset for seckillGoodsId={}", id);
+            executionService.onSoldOutReset(id);
+        } else {
+            log.info("Received sold-out broadcast for seckillGoodsId={}", body);
+            executionService.onSoldOutBroadcast(Long.parseLong(body));
+        }
     }
 }

@@ -9,12 +9,14 @@ import org.springframework.stereotype.Service;
 
 import com.flashsale.common.exception.BizException;
 import com.flashsale.common.result.ErrorCode;
+import com.flashsale.goods.api.dto.GoodsDTO;
 import com.flashsale.goods.api.dto.SeckillGoodsDTO;
 import com.flashsale.goods.domain.Goods;
 import com.flashsale.goods.domain.GoodsRepository;
 import com.flashsale.goods.domain.Money;
 import com.flashsale.goods.domain.SeckillGoods;
 import com.flashsale.goods.domain.SeckillGoodsRepository;
+import com.flashsale.goods.domain.TimeRange;
 
 import lombok.RequiredArgsConstructor;
 
@@ -33,6 +35,69 @@ public class GoodsService {
     private final SeckillGoodsRepository seckillGoodsRepository;
 
     private final StringRedisTemplate redisTemplate;
+
+    // ==================== 商品 CRUD ====================
+
+    /**
+     * 查询全部商品。
+     */
+    public List<GoodsDTO> listGoods() {
+        return goodsRepository.findAll().stream().map(this::toGoodsDTO).collect(Collectors.toList());
+    }
+
+    /**
+     * 按 ID 查询商品。
+     *
+     * @param id 商品 ID
+     * @return 商品 DTO
+     * @throws BizException 商品不存在
+     */
+    public GoodsDTO getGoods(Long id) {
+        Goods goods = goodsRepository.findById(id).orElseThrow(() -> new BizException(ErrorCode.NOT_FOUND));
+        return toGoodsDTO(goods);
+    }
+
+    /**
+     * 创建商品。
+     *
+     * @param dto 商品信息
+     * @return 带 ID 的商品 DTO
+     */
+    public GoodsDTO createGoods(GoodsDTO dto) {
+        Goods goods = Goods.create(dto.getGoodsName(), dto.getGoodsImg(),
+            Money.of(dto.getGoodsPrice()), dto.getGoodsStock());
+        goods = goodsRepository.save(goods);
+        return toGoodsDTO(goods);
+    }
+
+    /**
+     * 更新商品。
+     *
+     * @param id  商品 ID
+     * @param dto 更新信息
+     * @return 更新后的商品 DTO
+     * @throws BizException 商品不存在
+     */
+    public GoodsDTO updateGoods(Long id, GoodsDTO dto) {
+        Goods goods = goodsRepository.findById(id).orElseThrow(() -> new BizException(ErrorCode.NOT_FOUND));
+        goods.rename(dto.getGoodsName());
+        goods.changeImage(dto.getGoodsImg());
+        goods.changePrice(Money.of(dto.getGoodsPrice()));
+        goods.resetStock(dto.getGoodsStock());
+        goodsRepository.save(goods);
+        return toGoodsDTO(goods);
+    }
+
+    /**
+     * 删除商品。
+     *
+     * @param id 商品 ID
+     */
+    public void deleteGoods(Long id) {
+        goodsRepository.deleteById(id);
+    }
+
+    // ==================== 秒杀商品 ====================
 
     /**
      * 查询所有秒杀商品列表（含关联商品信息）。
@@ -56,6 +121,43 @@ public class GoodsService {
         SeckillGoods sg = seckillGoodsRepository.findById(id).orElseThrow(() -> new BizException(ErrorCode.NOT_FOUND));
         Goods goods = goodsRepository.findById(sg.getGoodsId()).orElse(null);
         return toSeckillDTO(sg, goods);
+    }
+
+    /**
+     * 创建秒杀商品。
+     */
+    public SeckillGoodsDTO createSeckillGoods(SeckillGoodsDTO dto) {
+        goodsRepository.findById(dto.getGoodsId())
+            .orElseThrow(() -> new BizException(ErrorCode.NOT_FOUND, "关联商品不存在"));
+        SeckillGoods sg = SeckillGoods.create(
+            dto.getGoodsId(),
+            Money.of(dto.getSeckillPrice()),
+            dto.getStockCount(),
+            new TimeRange(dto.getStartTime(), dto.getEndTime()));
+        sg = seckillGoodsRepository.save(sg);
+        Goods goods = goodsRepository.findById(sg.getGoodsId()).orElse(null);
+        return toSeckillDTO(sg, goods);
+    }
+
+    /**
+     * 更新秒杀商品（goodsId 不可改）。
+     */
+    public SeckillGoodsDTO updateSeckillGoods(Long id, SeckillGoodsDTO dto) {
+        SeckillGoods sg = seckillGoodsRepository.findById(id)
+            .orElseThrow(() -> new BizException(ErrorCode.NOT_FOUND));
+        sg.changeSeckillPrice(Money.of(dto.getSeckillPrice()));
+        sg.resetStock(dto.getStockCount());
+        sg.changeTimeRange(new TimeRange(dto.getStartTime(), dto.getEndTime()));
+        seckillGoodsRepository.save(sg);
+        Goods goods = goodsRepository.findById(sg.getGoodsId()).orElse(null);
+        return toSeckillDTO(sg, goods);
+    }
+
+    /**
+     * 删除秒杀商品。
+     */
+    public void deleteSeckillGoods(Long id) {
+        seckillGoodsRepository.deleteById(id);
     }
 
     /**
@@ -88,12 +190,26 @@ public class GoodsService {
     public void warmUpStock() {
         List<SeckillGoods> list = seckillGoodsRepository.findAll();
         for (SeckillGoods sg : list) {
-            String key = "seckill:stock:" + sg.getId();
-            redisTemplate.opsForValue().set(key, String.valueOf(sg.getStockCount()), 2, TimeUnit.HOURS);
+            String stockKey = "seckill:stock:" + sg.getId();
+            redisTemplate.opsForValue().set(stockKey, String.valueOf(sg.getStockCount()), 2, TimeUnit.HOURS);
+            // 清除 soldout 标记（可能由之前未预热的请求误设）
+            redisTemplate.delete("seckill:soldout:" + sg.getId());
+            // 通知 seckill 服务清除内存中的 soldout 标记
+            redisTemplate.convertAndSend("seckill:soldout:channel", "reset:" + sg.getId());
         }
     }
 
     // ==================== DTO 转换 ====================
+
+    private GoodsDTO toGoodsDTO(Goods goods) {
+        GoodsDTO dto = new GoodsDTO();
+        dto.setId(goods.getId());
+        dto.setGoodsName(goods.getGoodsName());
+        dto.setGoodsImg(goods.getGoodsImg());
+        dto.setGoodsPrice(goods.getGoodsPrice().amount());
+        dto.setGoodsStock(goods.getGoodsStock());
+        return dto;
+    }
 
     /**
      * 组合秒杀商品与原始商品信息，构建 DTO。 价格从 {@link Money} 值对象中提取 BigDecimal。

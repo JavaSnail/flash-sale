@@ -79,4 +79,11 @@ public class SeckillExecutionService {
     public void onSoldOutBroadcast(Long seckillGoodsId) {
         localSoldOutMap.put(seckillGoodsId, true);
     }
+
+    /**
+     * Called by Pub/Sub listener on warmup reset — clear sold-out flag for re-stocked goods
+     */
+    public void onSoldOutReset(Long seckillGoodsId) {
+        localSoldOutMap.remove(seckillGoodsId);
+    }
 }
