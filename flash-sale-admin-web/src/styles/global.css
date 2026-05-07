@@ -907,6 +907,7 @@ body {
 .admin-sider {
   background: var(--bg-dark) !important;
   border-right: 1px solid rgba(255,255,255,0.04);
+  transition: all var(--duration-normal) var(--ease-out-expo) !important;
 }
 
 .admin-sider-logo {
@@ -916,6 +917,18 @@ body {
   justify-content: center;
   gap: 10px;
   border-bottom: 1px solid rgba(255,255,255,0.06);
+  overflow: hidden;
+  white-space: nowrap;
+  transition: all var(--duration-normal) var(--ease-out-expo);
+}
+
+.admin-sider-logo.collapsed {
+  gap: 0;
+}
+
+.admin-sider-logo.collapsed .logo-dot {
+  width: 12px;
+  height: 12px;
 }
 
 .admin-sider-logo .logo-dot {

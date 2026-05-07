@@ -33,7 +33,18 @@ request.interceptors.response.use(
     error.code = result.code;
     return Promise.reject(error);
   },
-  () => {
+  (error) => {
+    // 尝试从响应体中提取业务错误信息
+    if (error.response?.data?.code !== undefined) {
+      const result = error.response.data as Result<unknown>;
+      if (result.code === ErrorCode.UNAUTHORIZED) {
+        localStorage.removeItem('token');
+        window.location.href = '/login';
+      }
+      const bizError = new Error(result.msg || '请求失败') as Error & { code: number };
+      bizError.code = result.code;
+      return Promise.reject(bizError);
+    }
     return Promise.reject(new Error('网络异常，请检查网络连接'));
   },
 );

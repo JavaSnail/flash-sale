@@ -1,1 +1,2 @@
 com.flashsale.common.config.MyBatisAutoFillHandler
+com.flashsale.common.exception.GlobalExceptionHandler

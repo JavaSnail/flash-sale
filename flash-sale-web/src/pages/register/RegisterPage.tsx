@@ -11,7 +11,7 @@ export default function RegisterPage() {
   const onFinish = async (values: {
     phone: string;
     password: string;
-    nickname?: string;
+    nickname: string;
   }) => {
     setLoading(true);
     try {
@@ -87,8 +87,22 @@ export default function RegisterPage() {
             >
               <Input.Password prefix={<LockOutlined style={{ color: '#A1A1AA' }} />} placeholder="确认密码" />
             </Form.Item>
-            <Form.Item name="nickname">
-              <Input prefix={<UserOutlined style={{ color: '#A1A1AA' }} />} placeholder="昵称（选填）" />
+            <Form.Item
+              name="nickname"
+              rules={[
+                { required: true, message: '请输入昵称' },
+                { max: 32, message: '昵称长度不能超过32个字符' },
+                {
+                  validator(_, value) {
+                    if (value && value.trim().length === 0) {
+                      return Promise.reject(new Error('昵称不能为空白字符'));
+                    }
+                    return Promise.resolve();
+                  },
+                },
+              ]}
+            >
+              <Input prefix={<UserOutlined style={{ color: '#A1A1AA' }} />} placeholder="昵称" />
             </Form.Item>
             <Form.Item style={{ marginTop: 8 }}>
               <Button

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { Layout, Menu, Button } from 'antd';
 import {
@@ -8,6 +9,8 @@ import {
   AccountBookOutlined,
   FireOutlined,
   LogoutOutlined,
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
 } from '@ant-design/icons';
 import useAuthStore from '@/store/useAuthStore';
 
@@ -26,19 +29,29 @@ export default function AdminLayout() {
   const navigate = useNavigate();
   const location = useLocation();
   const logout = useAuthStore((s) => s.logout);
+  const [collapsed, setCollapsed] = useState(false);
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      <Sider width={220} className="admin-sider">
-        <div className="admin-sider-logo">
+      <Sider
+        width={220}
+        collapsedWidth={64}
+        collapsible
+        collapsed={collapsed}
+        onCollapse={setCollapsed}
+        trigger={null}
+        className="admin-sider"
+      >
+        <div className={`admin-sider-logo ${collapsed ? 'collapsed' : ''}`}>
           <div className="logo-dot" />
-          <span>Flash-Sale Admin</span>
+          {!collapsed && <span>Flash-Sale Admin</span>}
         </div>
         <Menu
           mode="inline"
           selectedKeys={[location.pathname]}
           items={menuItems}
           onClick={({ key }) => navigate(key)}
+          inlineCollapsed={collapsed}
         />
       </Sider>
       <Layout>
@@ -47,10 +60,16 @@ export default function AdminLayout() {
           style={{
             padding: '0 24px',
             display: 'flex',
-            justifyContent: 'flex-end',
+            justifyContent: 'space-between',
             alignItems: 'center',
           }}
         >
+          <Button
+            type="text"
+            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+            onClick={() => setCollapsed(!collapsed)}
+            style={{ fontSize: 16 }}
+          />
           <Button
             type="text"
             icon={<LogoutOutlined />}

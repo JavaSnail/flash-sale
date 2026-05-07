@@ -32,6 +32,15 @@ public class Result<T> implements Serializable {
     @Schema(description = "业务数据")
     private T data;
 
+    @Schema(description = "链路追踪 ID，便于排查问题")
+    private String traceId;
+
+    public Result(int code, String msg, T data) {
+        this.code = code;
+        this.msg = msg;
+        this.data = data;
+    }
+
     public static <T> Result<T> success(T data) {
         return new Result<>(0, "success", data);
     }
@@ -41,10 +50,21 @@ public class Result<T> implements Serializable {
     }
 
     public static <T> Result<T> error(ErrorCode errorCode) {
-        return new Result<>(errorCode.getCode(), errorCode.getMsg(), null);
+        Result<T> result = new Result<>(errorCode.getCode(), errorCode.getMsg(), null);
+        result.fillTraceId();
+        return result;
     }
 
     public static <T> Result<T> error(int code, String msg) {
-        return new Result<>(code, msg, null);
+        Result<T> result = new Result<>(code, msg, null);
+        result.fillTraceId();
+        return result;
+    }
+
+    /**
+     * 从 MDC 读取 traceId 填入响应，用于错误响应时让前端能拿到链路 ID。
+     */
+    private void fillTraceId() {
+        this.traceId = org.slf4j.MDC.get("traceId");
     }
 }

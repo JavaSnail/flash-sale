@@ -50,8 +50,8 @@ export default function ActivityFormPage() {
         goodsId: values.goodsId,
         seckillPrice: values.seckillPrice,
         stockCount: values.stockCount,
-        startTime: values.timeRange[0].toISOString(),
-        endTime: values.timeRange[1].toISOString(),
+        startTime: values.timeRange[0].format('YYYY-MM-DDTHH:mm:ss'),
+        endTime: values.timeRange[1].format('YYYY-MM-DDTHH:mm:ss'),
       };
       if (isEdit) {
         await updateSeckillGoods(Number(id), payload);
