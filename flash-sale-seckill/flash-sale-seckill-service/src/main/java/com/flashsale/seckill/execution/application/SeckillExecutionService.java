@@ -42,9 +42,9 @@ public class SeckillExecutionService {
         }
 
         // 2. Local memory check - sold out?
-        if (Boolean.TRUE.equals(localSoldOutMap.get(seckillGoodsId))) {
-            throw new BizException(ErrorCode.SECKILL_OVER);
-        }
+//        if (Boolean.TRUE.equals(localSoldOutMap.get(seckillGoodsId))) {
+//            throw new BizException(ErrorCode.SECKILL_OVER);
+//        }
 
         // 3. Redis check - sold out?
         if (stockRepository.isSoldOut(seckillGoodsId)) {

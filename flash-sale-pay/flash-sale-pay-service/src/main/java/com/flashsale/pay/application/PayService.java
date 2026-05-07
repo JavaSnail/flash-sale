@@ -1,6 +1,7 @@
 package com.flashsale.pay.application;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
@@ -46,6 +47,17 @@ public class PayService {
      * @return 支付记录 ID
      */
     public Long createPayment(PayRequestDTO request) {
+        // 如果该订单已有支付记录，复用已有记录（避免重复创建）
+        Optional<Payment> existing = paymentRepository.findByOrderId(request.getOrderId());
+        if (existing.isPresent()) {
+            Payment old = existing.get();
+            if (old.getStatus() == PaymentStatus.SUCCESS) {
+                throw new BizException(ErrorCode.PAY_FAIL, "订单已支付成功，请勿重复支付");
+            }
+            // 待支付或失败的记录，重置状态后复用
+            paymentRepository.updateStatus(old.getId(), PaymentStatus.PENDING.code(), null);
+            return old.getId();
+        }
         Payment payment = Payment.create(request.getOrderId(), request.getUserId(), request.getAmount(),
             PayChannel.of(request.getPayChannel()));
         payment = paymentRepository.save(payment);
