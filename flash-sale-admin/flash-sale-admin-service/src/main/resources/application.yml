@@ -28,6 +28,12 @@ spring:
       host: ${REDIS_HOST:161.118.240.213}
       port: ${REDIS_PORT:6379}
 
+sa-token:
+  token-name: Admin-Token
+  timeout: 86400
+  is-concurrent: true
+  token-style: uuid
+
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**/*.xml
   global-config:

@@ -6,6 +6,7 @@ import type { ColumnsType } from 'antd/es/table';
 import dayjs from 'dayjs';
 import { getSeckillGoodsList, deleteSeckillGoods } from '@/api/goods';
 import type { SeckillGoodsDTO } from '@/types';
+import usePermission from '@/hooks/usePermission';
 
 function deriveStatus(startTime: string, endTime: string): { text: string; color: string } {
   const now = dayjs();
@@ -16,6 +17,7 @@ function deriveStatus(startTime: string, endTime: string): { text: string; color
 
 export default function ActivityListPage() {
   const navigate = useNavigate();
+  const canCreate = usePermission('admin:activity:create');
   const [data, setData] = useState<SeckillGoodsDTO[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -115,14 +117,16 @@ export default function ActivityListPage() {
         <h2 style={{ fontSize: 20, fontWeight: 700, margin: 0, letterSpacing: -0.3 }}>
           秒杀商品管理
         </h2>
-        <Button
-          type="primary"
-          icon={<PlusOutlined />}
-          onClick={() => navigate('/activities/create')}
-          style={{ borderRadius: 10, fontWeight: 600 }}
-        >
-          创建秒杀商品
-        </Button>
+        {canCreate && (
+          <Button
+            type="primary"
+            icon={<PlusOutlined />}
+            onClick={() => navigate('/activities/create')}
+            style={{ borderRadius: 10, fontWeight: 600 }}
+          >
+            创建秒杀商品
+          </Button>
+        )}
       </div>
       <Table
         columns={columns}

@@ -8,11 +8,11 @@ const request = axios.create({
   timeout: 10000,
 });
 
-// 请求拦截器：注入 token
+// 请求拦截器：注入 Admin-Token
 request.interceptors.request.use((config) => {
   const token = localStorage.getItem('admin_token');
   if (token) {
-    config.headers.Authorization = token;
+    config.headers['Admin-Token'] = token;
   }
   return config;
 });

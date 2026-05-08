@@ -3,8 +3,10 @@ import { Button, Typography, Popconfirm, Tag, message } from 'antd';
 import { FireFilled, CheckCircleOutlined, CloseCircleOutlined, ThunderboltOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import { warmup } from '@/api/admin';
+import usePermission from '@/hooks/usePermission';
 
 export default function WarmupPage() {
+  const canTrigger = usePermission('admin:warmup:trigger');
   const [loading, setLoading] = useState(false);
   const [lastTime, setLastTime] = useState<string | null>(null);
   const [success, setSuccess] = useState<boolean | null>(null);
@@ -66,6 +68,7 @@ export default function WarmupPage() {
           type="primary"
           icon={<FireFilled />}
           loading={loading}
+          disabled={!canTrigger}
           size="large"
           style={{
             height: 48,
@@ -73,9 +76,9 @@ export default function WarmupPage() {
             fontWeight: 700,
             borderRadius: 12,
             paddingInline: 32,
-            background: 'linear-gradient(135deg, #DC2626 0%, #EA580C 100%)',
+            background: canTrigger ? 'linear-gradient(135deg, #DC2626 0%, #EA580C 100%)' : undefined,
             border: 'none',
-            boxShadow: '0 4px 16px rgba(220,38,38,0.25)',
+            boxShadow: canTrigger ? '0 4px 16px rgba(220,38,38,0.25)' : undefined,
           }}
         >
           执行预热

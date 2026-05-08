@@ -1,25 +1,60 @@
 import { create } from 'zustand';
-import type { UserDTO } from '@/types';
+import type { AdminLoginVO, AdminMenuVO } from '@/types';
 
 interface AuthState {
   token: string | null;
-  user: UserDTO | null;
-  setToken: (token: string) => void;
-  setUser: (user: UserDTO) => void;
+  userId: number | null;
+  username: string | null;
+  realName: string | null;
+  avatar: string | null;
+  roles: string[];
+  permissions: string[];
+  menus: AdminMenuVO[];
+  setLoginData: (data: AdminLoginVO) => void;
+  hasPermission: (perm: string) => boolean;
   logout: () => void;
 }
 
-const useAuthStore = create<AuthState>((set) => ({
+const useAuthStore = create<AuthState>((set, get) => ({
   token: localStorage.getItem('admin_token'),
-  user: null,
-  setToken: (token: string) => {
-    localStorage.setItem('admin_token', token);
-    set({ token });
+  userId: null,
+  username: null,
+  realName: null,
+  avatar: null,
+  roles: [],
+  permissions: [],
+  menus: [],
+
+  setLoginData: (data: AdminLoginVO) => {
+    localStorage.setItem('admin_token', data.token);
+    set({
+      token: data.token,
+      userId: data.userId,
+      username: data.username,
+      realName: data.realName,
+      avatar: data.avatar,
+      roles: data.roles,
+      permissions: data.permissions,
+      menus: data.menus,
+    });
   },
-  setUser: (user: UserDTO) => set({ user }),
+
+  hasPermission: (perm: string) => {
+    return get().permissions.includes(perm);
+  },
+
   logout: () => {
     localStorage.removeItem('admin_token');
-    set({ token: null, user: null });
+    set({
+      token: null,
+      userId: null,
+      username: null,
+      realName: null,
+      avatar: null,
+      roles: [],
+      permissions: [],
+      menus: [],
+    });
   },
 }));
 

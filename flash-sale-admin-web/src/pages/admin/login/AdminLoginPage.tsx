@@ -1,20 +1,20 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Form, Input, Button, message } from 'antd';
-import { MobileOutlined, LockOutlined, SafetyCertificateOutlined } from '@ant-design/icons';
-import { login } from '@/api/user';
+import { UserOutlined, LockOutlined, SafetyCertificateOutlined } from '@ant-design/icons';
+import { adminLogin } from '@/api/auth';
 import useAuthStore from '@/store/useAuthStore';
 
 export default function AdminLoginPage() {
   const navigate = useNavigate();
-  const setToken = useAuthStore((s) => s.setToken);
+  const setLoginData = useAuthStore((s) => s.setLoginData);
   const [loading, setLoading] = useState(false);
 
-  const onFinish = async (values: { phone: string; password: string }) => {
+  const onFinish = async (values: { username: string; password: string }) => {
     setLoading(true);
     try {
-      const token = await login(values.phone, values.password);
-      setToken(token);
+      const data = await adminLogin(values.username, values.password);
+      setLoginData(data);
       message.success('登录成功');
       navigate('/dashboard', { replace: true });
     } catch (err: unknown) {
@@ -70,15 +70,12 @@ export default function AdminLoginPage() {
         }}>
           <Form onFinish={onFinish} size="large" layout="vertical">
             <Form.Item
-              name="phone"
-              rules={[
-                { required: true, message: '请输入手机号' },
-                { pattern: /^1\d{10}$/, message: '请输入正确的手机号' },
-              ]}
+              name="username"
+              rules={[{ required: true, message: '请输入用户名' }]}
             >
               <Input
-                prefix={<MobileOutlined style={{ color: '#71717A' }} />}
-                placeholder="管理员手机号"
+                prefix={<UserOutlined style={{ color: '#71717A' }} />}
+                placeholder="管理员用户名"
               />
             </Form.Item>
             <Form.Item

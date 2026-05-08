@@ -17,7 +17,7 @@ export default defineConfig({
         changeOrigin: true,
       },
       '/admin': {
-        target: 'http://localhost:8080',
+        target: 'http://localhost:8086',
         changeOrigin: true,
       },
       '/goods': {

@@ -9,7 +9,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableFeignClients(basePackages = "com.flashsale.*.api.feign")
-@MapperScan("com.flashsale.admin.infrastructure.mapper")
+@MapperScan({"com.flashsale.admin.infrastructure.mapper", "com.flashsale.admin.infrastructure.sys.mapper"})
 public class AdminApplication {
     public static void main(String[] args) {
         SpringApplication.run(AdminApplication.class, args);

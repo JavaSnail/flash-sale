@@ -12,6 +12,10 @@ import ActivityFormPage from '@/pages/admin/activities/ActivityFormPage';
 import OrderListPage from '@/pages/admin/orders/OrderListPage';
 import PaymentListPage from '@/pages/admin/payments/PaymentListPage';
 import WarmupPage from '@/pages/admin/warmup/WarmupPage';
+import UserListPage from '@/pages/admin/system/UserListPage';
+import RoleListPage from '@/pages/admin/system/RoleListPage';
+import PermissionListPage from '@/pages/admin/system/PermissionListPage';
+import MenuListPage from '@/pages/admin/system/MenuListPage';
 
 export default function App() {
   return (
@@ -33,6 +37,12 @@ export default function App() {
             <Route path="/orders" element={<OrderListPage />} />
             <Route path="/payments" element={<PaymentListPage />} />
             <Route path="/warmup" element={<WarmupPage />} />
+
+            {/* 系统管理 */}
+            <Route path="/system/users" element={<UserListPage />} />
+            <Route path="/system/roles" element={<RoleListPage />} />
+            <Route path="/system/permissions" element={<PermissionListPage />} />
+            <Route path="/system/menus" element={<MenuListPage />} />
           </Route>
         </Route>
 

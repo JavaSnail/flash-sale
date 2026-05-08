@@ -19,7 +19,13 @@
       "mcp__ide__getDiagnostics",
       "Bash(xargs cat:*)",
       "Bash(cp:*)",
-      "Bash(rm:*)"
+      "Bash(rm:*)",
+      "WebFetch(domain:rocketmq.apache.org)",
+      "WebFetch(domain:deepwiki.com)",
+      "WebFetch(domain:github.com)",
+      "Bash(printf 'admin123f1a5h$@le')",
+      "Bash(printf '239f573666fe8ea833dabff761620d9aabcd1234')",
+      "Skill(commit)"
     ]
   }
 }

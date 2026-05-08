@@ -14,6 +14,7 @@ import com.flashsale.admin.api.dto.SeckillActivityDTO;
 import com.flashsale.admin.application.AdminService;
 import com.flashsale.common.result.Result;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -28,18 +29,21 @@ public class AdminController {
     private final AdminService adminService;
 
     @Operation(summary = "查询活动列表", description = "获取所有秒杀活动")
+    @SaCheckPermission("admin:activity:list")
     @GetMapping("/activities")
     public Result<List<SeckillActivityDTO>> listActivities() {
         return Result.success(adminService.listActivities());
     }
 
     @Operation(summary = "查询活动详情", description = "根据ID获取秒杀活动详情")
+    @SaCheckPermission("admin:activity:detail")
     @GetMapping("/activities/{id}")
     public Result<SeckillActivityDTO> getActivity(@Parameter(description = "活动ID") @PathVariable("id") Long id) {
         return Result.success(adminService.getActivity(id));
     }
 
     @Operation(summary = "创建秒杀活动", description = "新建一个秒杀活动")
+    @SaCheckPermission("admin:activity:create")
     @PostMapping("/activities")
     public Result<Void> createActivity(@RequestBody SeckillActivityDTO dto) {
         adminService.createActivity(dto);
@@ -47,6 +51,7 @@ public class AdminController {
     }
 
     @Operation(summary = "触发预热", description = "触发库存缓存预热")
+    @SaCheckPermission("admin:warmup:trigger")
     @PostMapping("/warmup")
     public Result<Void> warmUp() {
         adminService.triggerWarmUp();
@@ -54,6 +59,7 @@ public class AdminController {
     }
 
     @Operation(summary = "数据看板", description = "获取系统运营数据概览")
+    @SaCheckPermission("admin:dashboard:view")
     @GetMapping("/dashboard")
     public Result<DashboardDTO> dashboard() {
         return Result.success(adminService.dashboard());

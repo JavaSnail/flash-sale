@@ -82,6 +82,67 @@ export interface SeckillActivityDTO {
   status?: number; // 0=未开始, 1=进行中, 2=已结束
 }
 
+// ---- Admin Auth Types ----
+
+export interface AdminLoginVO {
+  token: string;
+  userId: number;
+  username: string;
+  realName: string | null;
+  avatar: string | null;
+  roles: string[];
+  permissions: string[];
+  menus: AdminMenuVO[];
+}
+
+export interface AdminMenuVO {
+  id: number;
+  parentId: number;
+  menuName: string;
+  menuType: number; // 1-目录 2-菜单 3-按钮
+  routePath: string | null;
+  componentPath: string | null;
+  permCode: string | null;
+  icon: string | null;
+  sortOrder: number;
+  visible: number;
+  children: AdminMenuVO[];
+}
+
+export interface AdminUserVO {
+  id: number;
+  username: string;
+  realName: string | null;
+  phone: string | null;
+  email: string | null;
+  avatar: string | null;
+  status: number;
+  lastLoginTime: string | null;
+  createTime: string;
+  roleIds?: number[];
+  roleCodes?: string[];
+}
+
+export interface RoleVO {
+  id: number;
+  roleCode: string;
+  roleName: string;
+  description: string | null;
+  status: number;
+  sortOrder: number;
+  createTime: string;
+  permissionIds?: number[];
+}
+
+export interface PermissionVO {
+  id: number;
+  permCode: string;
+  permName: string;
+  apiPath: string | null;
+  apiMethod: string | null;
+  description: string | null;
+}
+
 export const ErrorCode = {
   SUCCESS: 0,
   PARAM_ERROR: 400,
